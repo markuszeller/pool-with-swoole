@@ -4,6 +4,6 @@ This is an example to use [Swoole](https://www.swoole.co.uk/) for pooling worker
 
 Additional resources
 ---
-Install this via composer to have type completion for your IDE (testet with PhpStorm)
+Install this via composer to have type completion for your IDE (tested with PhpStorm)
 
 `composer require --dev "eaglewu/swoole-ide-helper:dev-master"`
