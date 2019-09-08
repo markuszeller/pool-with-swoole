@@ -3,42 +3,42 @@ include './vendor/autoload.php';
 use Swoole\Process;
 
 // Params
-$workerCount = 8;
-$jobCount    = 20000;
+const WORKER_COUNT = 8;
+const JOB_COUNT    = 20000;
 
 // Create workers
 $workers = [];
-for ($i = 0; $i < $workerCount; $i++)
+for ($i = 0; $i < WORKER_COUNT; $i++)
 {
-    $worker = new Process("doWork", false, 2);
+    $worker = new Process('worker', false, 2);
     $worker->start();
     $workers[] = $worker;
 }
 
 // Dispatch Jobs to workers
-for ($i = 0; $i < $jobCount; $i++)
+for ($i = 0; $i < JOB_COUNT; $i++)
 {
-    $workers[$i % $workerCount]->write($i);
+    $workers[$i % WORKER_COUNT]->write($i);
 }
 
 // Make sure, every worker gets a "-1" as terminator
-for ($i = 0; $i < $workerCount; $i++)
+for ($i = 0; $i < WORKER_COUNT; $i++)
 {
-    $workers[$i]->write("-1");
+    $workers[$i]->write('-1');
 }
 
 // Wait for all workers to complete
-for ($i = 0; $i < $workerCount; $i++)
+for ($i = 0; $i < WORKER_COUNT; $i++)
 {
     $workers[$i]->wait();
 }
 
 // Do the work of a worker
-function doWork(Process $process)
+function worker(Process $process)
 {
     while (($data = $process->read()) !== false)
     {
-        if ($data !== "-1")
+        if ($data !== '-1')
         {
             break;
         }
